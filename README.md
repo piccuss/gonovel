@@ -10,7 +10,8 @@ A terminal novel online reading tool.Now it supports:
 ## Usage
 
         $go get github.com/piccuss/gonovel
-        $gonovel
+        $go build
+        $./gonovel
 
 ### Command during reading
 

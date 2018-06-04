@@ -3,10 +3,11 @@ package main
 import (
 	"bufio"
 	"fmt"
-	"gonovel/crawler"
 	"os"
 	"strconv"
 	"strings"
+
+	"github.com/piccuss/gonovel/crawler"
 )
 
 var historyNovels = []*crawler.Novel{}

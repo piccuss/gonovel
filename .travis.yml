@@ -8,3 +8,4 @@ script:
 before_install:
   - go get github.com/axgle/mahonia
   - go get github.com/PuerkitoBio/goquery
+  - go get github.com/piccuss/gonovel

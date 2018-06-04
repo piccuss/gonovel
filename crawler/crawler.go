@@ -2,13 +2,12 @@ package crawler
 
 import (
 	"bytes"
-	"gonovel/trace"
 	"io/ioutil"
 	"net/http"
 	"strings"
 
+	"github.com/piccuss/gonovel/trace"
 	"github.com/axgle/mahonia"
-
 	"github.com/PuerkitoBio/goquery"
 )
 

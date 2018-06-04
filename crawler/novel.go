@@ -3,9 +3,10 @@ package crawler
 import (
 	"encoding/json"
 	"fmt"
-	"gonovel/trace"
 	"io/ioutil"
 	"os"
+
+	"github.com/piccuss/gonovel/trace"
 )
 
 type (
