@@ -4,3 +4,7 @@ go:
   - master
 script:
   - go build
+
+before_install:
+  - go get github.com/axgle/mahonia
+  - go get github.com/PuerkitoBio/goquery
