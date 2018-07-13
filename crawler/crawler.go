@@ -6,14 +6,14 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/piccuss/gonovel/trace"
-	"github.com/axgle/mahonia"
 	"github.com/PuerkitoBio/goquery"
+	"github.com/axgle/mahonia"
+	"github.com/piccuss/gonovel/trace"
 )
 
 const (
 	novelAPI       string = "https://www.37zw.net"
-	novelAPI2      string = "http://www.biquge.info"
+	novelAPI2      string = "http://www.biquge.com.tw"
 	novelSearchAPI string = "https://www.37zw.net/s/so.php?type=articlename&s="
 )
 
@@ -40,7 +40,6 @@ func getChapters(novel *Novel) []Chapter {
 	charsetType := "gbk"
 	api := novelAPI
 	if novel.Type == typeBiquege {
-		charsetType = "utf-8"
 		api = novelAPI2
 	}
 	doc, err := getDocument(api+novel.URI, charsetType)
@@ -64,10 +63,13 @@ func getContents(novel Novel, index int) []Content {
 	charsetType := "gbk"
 	api := novelAPI
 	if novel.Type == typeBiquege {
-		charsetType = "utf-8"
 		api = novelAPI2
 	}
-	doc, err := getDocument(api+novel.URI+novel.Chapters[index].URI, charsetType)
+	usrString := api + novel.URI + novel.Chapters[index].URI
+	if novel.Type == typeBiquege {
+		usrString = api + novel.Chapters[index].URI
+	}
+	doc, err := getDocument(usrString, charsetType)
 	trace.CheckErr(err)
 
 	contents := []Content{}
