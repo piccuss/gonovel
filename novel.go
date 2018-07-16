@@ -1,12 +1,10 @@
-package crawler
+package main
 
 import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"os"
-
-	"github.com/piccuss/gonovel/trace"
 )
 
 type (
@@ -82,5 +80,5 @@ func LoadHistory() ([]*Novel, error) {
 func SaveHistory(novels []*Novel) {
 	saveData, _ := json.Marshal(novels)
 	err := ioutil.WriteFile(historyFile, saveData, os.ModeAppend)
-	trace.CheckErr(err)
+	CheckErr(err)
 }

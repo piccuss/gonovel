@@ -1,4 +1,4 @@
-package crawler
+package main
 
 import (
 	"bytes"
@@ -8,7 +8,6 @@ import (
 
 	"github.com/PuerkitoBio/goquery"
 	"github.com/axgle/mahonia"
-	"github.com/piccuss/gonovel/trace"
 )
 
 const (
@@ -20,7 +19,7 @@ const (
 //SearchNovel return search result by novel name
 func SearchNovel(name string) []*Novel {
 	doc, err := getDocument(novelSearchAPI+name, "gbk")
-	trace.CheckErr(err)
+	CheckErr(err)
 	novels := []*Novel{}
 	doc.Find(".novellist").First().Find("li").Each(func(i int, s *goquery.Selection) {
 		novel := &Novel{}
@@ -43,7 +42,7 @@ func getChapters(novel *Novel) []Chapter {
 		api = novelAPI2
 	}
 	doc, err := getDocument(api+novel.URI, charsetType)
-	trace.CheckErr(err)
+	CheckErr(err)
 
 	chapters := []Chapter{}
 	doc.Find("#list").First().Find("dd").Each(func(i int, s *goquery.Selection) {
@@ -70,34 +69,45 @@ func getContents(novel Novel, index int) []Content {
 		usrString = api + novel.Chapters[index].URI
 	}
 	doc, err := getDocument(usrString, charsetType)
-	trace.CheckErr(err)
+	CheckErr(err)
 
 	contents := []Content{}
-	doc.Find("#content").First().Each(func(i int, s *goquery.Selection) {
-		//parse content
-		html, _ := s.Html()
-		for _, value := range strings.Split(html, "<br/><br/>") {
-			content := Content(value)
-			contents = append(contents, content)
-		}
-	})
+	if novel.Type == type37zw {
+		doc.Find("#content").First().Each(func(i int, s *goquery.Selection) {
+			//parse content
+			html, _ := s.Html()
+			for _, value := range strings.Split(html, "<br/><br/>") {
+				content := Content(value)
+				contents = append(contents, content)
+			}
+		})
+	} else {
+		doc.Find("#content").First().Each(func(i int, s *goquery.Selection) {
+			//parse content
+			html, _ := s.Html()
+			for _, value := range strings.Split(html, "<br/>\n<br/>") {
+				content := Content(value)
+				contents = append(contents, content)
+			}
+		})
+	}
 	return contents
 }
 
 //getDocument parse html to document
 func getDocument(url string, charset string) (*goquery.Document, error) {
 	res, err := http.Get(url)
-	trace.CheckErr(err)
+	CheckErr(err)
 
 	defer res.Body.Close()
 	if res.StatusCode != 200 {
-		trace.Error.Fatalln("Get chapters error.Status code :%d", res.StatusCode)
+		Error.Fatalln("Get chapters error.Status code :%d", res.StatusCode)
 
 	}
 
 	//decode gbk html to utf-8
 	respByte, err := ioutil.ReadAll(res.Body)
-	trace.CheckErr(err)
+	CheckErr(err)
 	if charset == "gbk" {
 		respByte = DecodeGBKBytes(respByte)
 	}

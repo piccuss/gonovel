@@ -6,16 +6,14 @@ import (
 	"os"
 	"strconv"
 	"strings"
-
-	"github.com/piccuss/gonovel/crawler"
 )
 
-var historyNovels = []*crawler.Novel{}
+var historyNovels = []*Novel{}
 
 func main() {
 	fmt.Println("Novel online reader.Copyright:Piccus Peng 2018")
 	fmt.Println("Loading history file...")
-	historyNovelsData, err := crawler.LoadHistory()
+	historyNovelsData, err := LoadHistory()
 	if err != nil {
 		fmt.Println(err.Error())
 	}
@@ -86,7 +84,7 @@ func search() {
 		fmt.Print("Input book name:")
 		name := getInput()
 		if name != "" {
-			novels := crawler.SearchNovel(name)
+			novels := SearchNovel(name)
 			for index, novel := range novels {
 				fmt.Println(index, ".")
 				novel.Println()
@@ -110,7 +108,7 @@ func search() {
 }
 
 //read novel from chapter index
-func read(novel *crawler.Novel, index int) {
+func read(novel *Novel, index int) {
 	if len(novel.Chapters) == 0 {
 		fmt.Println("Book is intializing...")
 		novel.InitNovel()
@@ -136,7 +134,7 @@ func read(novel *crawler.Novel, index int) {
 }
 
 //Jump to chapter index
-func jump(novel *crawler.Novel) {
+func jump(novel *Novel) {
 	fmt.Print("Input chapter index:")
 	jumpIndex := getInput()
 	jumpIndexInt64, _ := strconv.ParseInt(jumpIndex, 10, 0)
@@ -149,7 +147,7 @@ func jump(novel *crawler.Novel) {
 }
 
 //Listen user command during reading
-func listenCommand(novel *crawler.Novel) {
+func listenCommand(novel *Novel) {
 	//Press to read
 	command := getInput()
 	switch command {
@@ -173,7 +171,7 @@ func listenCommand(novel *crawler.Novel) {
 }
 
 //save novel read history
-func save(novel *crawler.Novel) {
+func save(novel *Novel) {
 	//if novel exist history
 	tag := false
 	for index, historyNovel := range historyNovels {
@@ -185,12 +183,12 @@ func save(novel *crawler.Novel) {
 	if !tag {
 		historyNovels = append(historyNovels, novel)
 	}
-	crawler.SaveHistory(historyNovels)
+	SaveHistory(historyNovels)
 	fmt.Println("Save complete...")
 }
 
 //find chapter return chapter index
-func findChapter(novel *crawler.Novel) {
+func findChapter(novel *Novel) {
 	fmt.Print("Input chaptername(contains):")
 	chaptername := getInput()
 	if chaptername != "" {
